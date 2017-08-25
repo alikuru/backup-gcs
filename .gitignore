@@ -1,0 +1,5 @@
+# Exclude settings file from the repo for obvious reasons.
+settings.conf
+
+# Exclude database dumps from the repo for the same reasons.
+dbs/

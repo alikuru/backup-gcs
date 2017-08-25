@@ -1,0 +1,25 @@
+# Mail settings
+mail_from="sender@domain.tld"
+mail_to="receiver@domain.tld"
+postmark_token="token-created-by-postmak-service"
+
+# MySQL settings
+# Use your root account credentials if you want to back all your databeses.
+# If you use an account other than root, you will only be able to backup databeses accessible to that particular user.
+# mysql_output is the target directory for MySQL dumps, it will hold archives for all dbs with rotating 7 days back.
+# You can use $scriptpath and $HOME parameters while setting mysql_output. It's probably best if you use an absolute path.
+mysql_user="root"
+mysql_password="my-very-strong-password"
+mysql_output="./dbs"
+
+# Root directory of vhosts
+root_vhosts="/path/to/vhosts/root/"
+
+# Google Cloud Storage settings
+# You might want to add -n to gs_sync_params if you want a test run before sending your backups to Google Cloud Storage.
+# If you want to backup your dbs and vhosts to the same bucket, put its name to both gs_bucket_vhosts & gs_bucket_dbs.
+# Be careful: If you use same bucket for both, make sure that you don't use -d option, which deletes files that are not in origin.
+gs_sync_params="-r -C -d"
+gs_bucket_vhosts="my-vhosts-bucket"
+gs_bucket_dbs="my-dbs-bucket"
+gs_sync_exclude="logs-aws/*"
