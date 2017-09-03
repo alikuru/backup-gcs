@@ -42,16 +42,16 @@ if [[ -f $scriptpath/settings.conf ]]; then
   # Sync all local assets with remote.
   echo -e "========================================\nSynchronizing databases\n========================================" >> $scriptpath/$logfile
   if [[ -z "$gs_sync_exclude" ]]; then
-    gsutil -m rsync $gs_sync_params $mysql_output gs://$gs_bucket_dbs >> $scriptpath/$logfile
+    gsutil -m rsync $gs_sync_params $mysql_output gs://$gs_bucket_dbs &>> $scriptpath/$logfile
   else
-    gsutil -m rsync $gs_sync_params -x "$gs_sync_exclude" $mysql_output gs://$gs_bucket_dbs >> $scriptpath/$logfile
+    gsutil -m rsync $gs_sync_params -x "$gs_sync_exclude" $mysql_output gs://$gs_bucket_dbs &>> $scriptpath/$logfile
   fi
   echo $? >> $scriptpath/$exitcodes
   echo -e "========================================\nSynchronizing virtual hosts\n========================================" >> $scriptpath/$logfile
   if [[ -z "$gs_sync_exclude" ]]; then
-    gsutil -m rsync $gs_sync_params $root_vhosts gs://$gs_bucket_vhosts >> $scriptpath/$logfile
+    gsutil -m rsync $gs_sync_params $root_vhosts gs://$gs_bucket_vhosts &>> $scriptpath/$logfile
   else
-    gsutil -m rsync $gs_sync_params -x "$gs_sync_exclude" $root_vhosts gs://$gs_bucket_vhosts >> $scriptpath/$logfile
+    gsutil -m rsync $gs_sync_params -x "$gs_sync_exclude" $root_vhosts gs://$gs_bucket_vhosts &>> $scriptpath/$logfile
   fi
   echo $? >> $scriptpath/$exitcodes
 
