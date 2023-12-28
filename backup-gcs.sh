@@ -21,12 +21,27 @@ if [[ -f $scriptpath/settings.conf ]]; then
     mkdir -p $mysql_output
   fi
 
+  # Skip databases set to be excluded in the settings.conf file.
+  excluded_dbs=( $mysql_exclude )
+  function excludeDBs()
+  {
+    local is_db_excluded="false"
+    for xdb in "${excluded_dbs[@]}"
+    do
+        if [ "$1" == "${xdb}" ]; then
+            is_db_excluded="true"
+            break
+        fi
+    done
+
+    echo "$is_db_excluded"
+  }
+
   # Dump all databeses and create arcives.
-  # Skip databases with names starting with an underscrore. Also, prefer not to dump "information_schema".
   databases=`mysql --user=$mysql_user --password=$mysql_password -e "SHOW DATABASES;" | tr -d "| " | grep -v Database`
   echo $? >> $scriptpath/$exitcodes
   for db in $databases; do
-    if [[ "$db" != "information_schema" ]] && [[ "$db" != _* ]] ; then
+    if [[ $(excludeDBs "$db") == "false" ]]; then
       echo -e "========================================\nDumping database: $db\n========================================" >> $scriptpath/$logfile
       mysqldump --force --opt --add-drop-table --log-error=$scriptpath/$logfile --user=$mysql_user --password=$mysql_password --databases $db > $mysql_output/$db.$suffix.sql
       echo $? >> $scriptpath/$exitcodes
@@ -37,7 +52,7 @@ if [[ -f $scriptpath/settings.conf ]]; then
       rm $mysql_output/$db.$rotate.tar.7z
     fi
   done
-  rm $mysql_output/*.sql $mysql_output/*.tar
+  rm $mysql_output/*.{sql,tar}
 
   # Sync all local assets with remote.
   echo -e "========================================\nSynchronizing databases\n========================================" >> $scriptpath/$logfile

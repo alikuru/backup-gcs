@@ -3,3 +3,7 @@ settings.conf
 
 # Exclude database dumps from the repo for the same reasons.
 dbs/
+
+# Avoid accidental inclusion of possible leftovers of premature exits.
+*.log
+mail.json

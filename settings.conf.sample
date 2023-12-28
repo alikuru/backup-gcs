@@ -11,6 +11,7 @@ postmark_token="token-created-by-postmak-service"
 mysql_user="root"
 mysql_password="my-very-strong-password"
 mysql_output="./dbs"
+mysql_exclude="information_schema mysql performance_schema sys"
 
 # Root directory of vhosts
 root_vhosts="/path/to/vhosts/root/"
@@ -19,7 +20,7 @@ root_vhosts="/path/to/vhosts/root/"
 # You might want to add -n to gs_sync_params if you want a test run before sending your backups to Google Cloud Storage.
 # If you want to backup your dbs and vhosts to the same bucket, put its name to both gs_bucket_vhosts & gs_bucket_dbs.
 # Be careful: If you use same bucket for both, make sure that you don't use -d option, which deletes files that are not in origin.
-gs_sync_params="-r -C -d"
+gs_sync_params="-r -C -d -e"
 gs_bucket_vhosts="my-vhosts-bucket"
 gs_bucket_dbs="my-dbs-bucket"
-gs_sync_exclude="logs-aws/*"
+gs_sync_exclude="^.*\/lscache\/.*$"
